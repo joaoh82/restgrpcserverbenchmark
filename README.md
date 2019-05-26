@@ -5,7 +5,7 @@ Project comparing REST HTTP/1.1 and HTTP/2 and gRPC with Go Language
 
 Results with HTTP/1.1
 ```
-2019/05/26 18:10:08 error executing request.  Get https://localhost:9191: dial tcp [::1]:9191: socket: too many open file`
+2019/05/26 18:10:08 error executing request.  Get https://localhost:9191: dial tcp [::1]:9191: socket: too many open files
 ```
 
 Results with HTTP/2
