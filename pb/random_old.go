@@ -1,6 +1,6 @@
 package pb
 
-type Random struct {
+type Random_old struct {
 	RandomString string
 	RandomInt    int
 }
