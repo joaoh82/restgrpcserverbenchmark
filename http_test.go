@@ -23,7 +23,7 @@ func BenchmarkHTTP11GetWithWorkers(b *testing.B) {
 }
 
 // This results in:
-// Get https://localhost:9191: dial tcp 127.0.1.1:9191: socket: too many open files
+// // Get https://localhost:9191: dial tcp 127.0.1.1:9191: socket: too many open files
 // func BenchmarkHTTP1Get(b *testing.B) {
 // 	client.Transport = &http.Transport{
 // 		TLSClientConfig: createTLSConfigWithCustomCertificate(),

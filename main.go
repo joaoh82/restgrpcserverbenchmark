@@ -21,5 +21,6 @@ func handler(w http.ResponseWriter, _ *http.Request) {
 
 func main() {
 	server := &http.Server{Addr: "localhost:9191", Handler: http.HandlerFunc(handler)}
+	log.Println("Go Backend: { HTTPVersion = 1 and 2 }; serving on https://localhost:9191/")
 	log.Fatal(server.ListenAndServeTLS("./cert/server.crt", "./cert/server.key"))
 }

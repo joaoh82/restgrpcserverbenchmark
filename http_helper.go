@@ -49,7 +49,7 @@ func createTLSConfigWithCustomCertificate() *tls.Config {
 	// Create a pool with the server certificate since it is not signed by a CA
 	caCert, err := ioutil.ReadFile("./cert/server.crt")
 	if err != nil {
-		log.Fatalf("error readind server certificate: %s", err)
+		log.Fatalf("error reading server certificate: %s", err)
 	}
 	caCertPool := x509.NewCertPool()
 	caCertPool.AppendCertsFromPEM(caCert)
