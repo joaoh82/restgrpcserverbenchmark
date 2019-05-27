@@ -8,7 +8,7 @@ import (
 	"google.golang.org/grpc"
 )
 
-const serverAddr = "localhost:9191"
+const serverAddr = "localhost:9090"
 
 func random(c context.Context, input *pb.Random) (*pb.Random, error) {
 	conn, err := grpc.Dial(serverAddr)

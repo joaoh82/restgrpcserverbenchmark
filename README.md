@@ -23,3 +23,18 @@ BenchmarkHTTP2GetWithWokers-8              10000            136328 ns/op
 ```
 protoc -I pb/ pb/random.proto --go_out=plugins=grpc:pb
 ```
+
+**Running all Benchmark Tests and it's results:**
+
+```
+go test -bench=.
+goos: darwin
+goarch: amd64
+pkg: github.com/joaoh82/restgrpcserverbenchmark
+BenchmarkGRPCWithWorkers-8                 10000            111027 ns/op
+BenchmarkHTTP11GetWithWorkers-8            20000             95175 ns/op
+BenchmarkHTTP2GetWithWorkers-8             10000            142579 ns/op
+BenchmarkHTTP2PostWithWorkers-8             5000            209982 ns/op
+PASS
+ok      github.com/joaoh82/restgrpcserverbenchmark      6.581s
+```

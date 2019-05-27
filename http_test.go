@@ -15,7 +15,7 @@ func BenchmarkHTTP11GetWithWorkers(b *testing.B) {
 		TLSClientConfig: createTLSConfigWithCustomCertificate(),
 	}
 	requestQueue := make(chan Request)
-	defer startWorkers(&requestQueue, noWorkers)()
+	defer startWorkers(&requestQueue, noWorkers, startWorker)()
 	b.ResetTimer() // don't count worker initialization time
 	for i := 0; i < b.N; i++ {
 		requestQueue <- Request{Path: "https://localhost:9191/get", Random: &pb.Random{}}
@@ -62,9 +62,27 @@ func BenchmarkHTTP2GetWithWorkers(b *testing.B) {
 		TLSClientConfig: createTLSConfigWithCustomCertificate(),
 	}
 	requestQueue := make(chan Request)
-	defer startWorkers(&requestQueue, noWorkers)()
+	defer startWorkers(&requestQueue, noWorkers, startWorker)()
 	b.ResetTimer() // don't count worker initialization time
 	for i := 0; i < b.N; i++ {
 		requestQueue <- Request{Path: "https://localhost:9191/get", Random: &pb.Random{}}
+	}
+}
+
+func BenchmarkHTTP2PostWithWorkers(b *testing.B) {
+	client.Transport = &http2.Transport{
+		TLSClientConfig: createTLSConfigWithCustomCertificate(),
+	}
+	requestQueue := make(chan Request)
+	defer startWorkers(&requestQueue, noWorkers, startPostWorker)()
+	b.ResetTimer() // don't count worker initialization time
+	for i := 0; i < b.N; i++ {
+		requestQueue <- Request{
+			Path: "https://localhost:9191/post",
+			Random: &pb.Random{
+				RandomInt:    2019,
+				RandomString: "a_string",
+			},
+		}
 	}
 }

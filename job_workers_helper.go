@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"sync"
 
 	"github.com/joaoh82/restgrpcserverbenchmark/pb"
@@ -13,12 +14,11 @@ type Request struct {
 
 const stopRequestPath = "STOP"
 
-func startWorkers(requestQueue *chan Request, noWorkers int) func() {
+func startWorkers(requestQueue *chan Request, noWorkers int, startWorker func(*chan Request, *sync.WaitGroup)) func() {
 	var wg sync.WaitGroup
 	for i := 0; i < noWorkers; i++ {
 		startWorker(requestQueue, &wg)
 	}
-	// Returns a function that stops as many workers as were just started
 	return func() {
 		wg.Add(noWorkers)
 		stopRequest := Request{Path: stopRequestPath}
@@ -40,4 +40,32 @@ func startWorker(requestQueue *chan Request, wg *sync.WaitGroup) {
 			get(request.Path, request.Random)
 		}
 	}()
+}
+
+func startPostWorker(requestQueue *chan Request, wg *sync.WaitGroup) {
+	go func() {
+		for {
+			request := <-*requestQueue
+			if request.Path == stopRequestPath {
+				wg.Done()
+				return
+			}
+			post(request.Path, request.Random, request.Random)
+		}
+	}()
+}
+
+func getStartGRPCWorkerFunction(client pb.RandomServiceClient) func(*chan Request, *sync.WaitGroup) {
+	return func(requestQueue *chan Request, wg *sync.WaitGroup) {
+		go func() {
+			for {
+				request := <-*requestQueue
+				if request.Path == stopRequestPath {
+					wg.Done()
+					return
+				}
+				client.DoSomething(context.TODO(), request.Random)
+			}
+		}()
+	}
 }

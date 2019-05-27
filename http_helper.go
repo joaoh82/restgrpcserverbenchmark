@@ -59,7 +59,6 @@ func post(path string, input interface{}, output interface{}) error {
 		return err
 	}
 
-	var client http.Client
 	res, err := client.Do(req)
 	if err != nil {
 		log.Println("error executing request ", err)
@@ -83,16 +82,18 @@ func post(path string, input interface{}, output interface{}) error {
 
 // This code was taken from https://posener.github.io/http2/
 func createTLSConfigWithCustomCertificate() *tls.Config {
-	// Create a pool with the server certificate since it is not signed by a CA
-	caCert, err := ioutil.ReadFile("./cert/server.crt")
+	// Create a pool with the server certificate since it is not signed
+	// by a known CA
+	caCert, err := ioutil.ReadFile("cert/server.crt")
 	if err != nil {
-		log.Fatalf("error reading server certificate: %s", err)
+		log.Fatalf("Reading server certificate: %s", err)
 	}
 	caCertPool := x509.NewCertPool()
 	caCertPool.AppendCertsFromPEM(caCert)
 
 	// Create TLS configuration with the certificate of the server
 	return &tls.Config{
-		RootCAs: caCertPool,
+		RootCAs:            caCertPool,
+		InsecureSkipVerify: false,
 	}
 }
