@@ -18,3 +18,8 @@ BenchmarkHTTP2Get-8        20000             90329 ns/op
 BenchmarkHTTP11GetWithWorkers-8            20000             94896 ns/op
 BenchmarkHTTP2GetWithWokers-8              10000            136328 ns/op
 ```
+
+**Generating gRPC Client service interface**
+```
+protoc -I pb/ pb/random.proto --go_out=plugins=grpc:pb
+```
